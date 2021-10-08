@@ -22,9 +22,13 @@
 	</background-jobs>
 	<commands>
 		<command>OCA\ServerInfo\Commands\UpdateStorageStats</command>
+    <command>OCA\ServerInfo\Command\LoadAverage</command>
+    <command>OCA\ServerInfo\Command\ServerData</command>
+    <command>OCA\ServerInfo\Command\CreateTmpData</command>
 	</commands>
     <settings>
         <admin>OCA\ServerInfo\Settings\AdminSettings</admin>
         <admin-section>OCA\ServerInfo\Settings\AdminSection</admin-section>
+        <admin>OCA\ServerInfo\Settings\AdminLogSettings</admin>
     </settings>
 </info>
