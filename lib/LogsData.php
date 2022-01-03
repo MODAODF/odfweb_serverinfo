@@ -150,8 +150,8 @@ class LogsData {
 		$data = null;
 		$dtLabels = array_keys($this->daysData);
 		foreach($dtLabels as $dt) {
-			$data[$dt.':00']["totalSpace"] = $this->daysData[$dt]['disk_total_space'];
-			$data[$dt.':00']["freeSpace"] = $this->daysData[$dt]['disk_free_space'];
+			$data[$dt.':00']["totalSpace"] = $this->daysData[$dt]['disk_total_space'] ?? null;
+			$data[$dt.':00']["freeSpace"] = $this->daysData[$dt]['disk_free_space'] ?? null;
 		}
 		return $data;
 	}
@@ -167,10 +167,10 @@ class LogsData {
 			$str = $this->daysData[$dt]['hour_load_average'] ?? "";
 			$hourLoadArr = json_decode($str, 1);
 			$dt = date("Y-m-d H", strtotime($dt.':00'));
-			$data[$dt.':00'] = $hourLoadArr[0];
-			$data[$dt.':15'] = $hourLoadArr[1];
-			$data[$dt.':30'] = $hourLoadArr[2];
-			$data[$dt.':45'] = $hourLoadArr[3];
+			$data[$dt.':00'] = $hourLoadArr[0] ?? null;
+			$data[$dt.':15'] = $hourLoadArr[1] ?? null;
+			$data[$dt.':30'] = $hourLoadArr[2] ?? null;
+			$data[$dt.':45'] = $hourLoadArr[3] ?? null;
 		}
 		return $data;
 	}
@@ -183,7 +183,7 @@ class LogsData {
 		$data = null;
 		$dtLabels = array_keys($this->daysData);
 		foreach($dtLabels as $dt) {
-			$data[$dt.':00'] = $this->daysData[$dt]['num_files'];
+			$data[$dt.':00'] = $this->daysData[$dt]['num_files'] ?? null;
 		}
 		return $data;
 	}
@@ -197,8 +197,8 @@ class LogsData {
 		$data = null;
 		$dtLabels = array_keys($this->daysData);
 		foreach($dtLabels as $dt) {
-			$data[$dt.':00']["totalUser"] = $this->daysData[$dt]['num_users'];
-			$data[$dt.':00']["hourActiveUser"] = $this->daysData[$dt]['hour_active_users'];
+			$data[$dt.':00']["totalUser"] = $this->daysData[$dt]['num_users'] ?? null;
+			$data[$dt.':00']["hourActiveUser"] = $this->daysData[$dt]['hour_active_users'] ?? null;
 		}
 		return $data;
 	}
@@ -213,9 +213,9 @@ class LogsData {
 		$data = null;
 		$dtLabels = array_keys($this->daysData);
 		foreach($dtLabels as $dt) {
-			$data["user"][$dt.':00'] = $this->daysData[$dt]['num_shares_user'];
-			$data["group"][$dt.':00'] = $this->daysData[$dt]['num_shares_groups'];
-			$data["link"][$dt.':00'] = $this->daysData[$dt]['num_shares_link'];
+			$data["user"][$dt.':00'] = $this->daysData[$dt]['num_shares_user'] ?? null;
+			$data["group"][$dt.':00'] = $this->daysData[$dt]['num_shares_groups'] ?? null;
+			$data["link"][$dt.':00'] = $this->daysData[$dt]['num_shares_link'] ?? null;
 		}
 		return $data;
 	}
