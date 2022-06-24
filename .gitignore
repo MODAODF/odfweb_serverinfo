@@ -1,3 +1,4 @@
 # PHP Coding Style
 vendor/
 .php_cs.cache
+build/
