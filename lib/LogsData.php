@@ -124,7 +124,7 @@ class LogsData {
 				if($rowJson === "") continue;
 				try {
 					$rowArr = json_decode($rowJson, 1);
-					if(!array_key_exists('timestamp', $rowArr)) continue;
+					if(!is_array($rowArr) || !array_key_exists('timestamp', $rowArr)) continue;
 				} catch (\Exception $e) {
 					continue;
 				}
