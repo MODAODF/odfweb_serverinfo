@@ -2,7 +2,7 @@
 $error = isset($_['error']) ? $_['error'] : null;
 if(!$error) {
     script('serverinfo', 'jspdf.min.2.4.0');
-    script('serverinfo', 'Chart.min.2.5.0');
+    // script('serverinfo', 'Chart.min'); // settings-admin 已經載入
     script('serverinfo', 'log');
     style('serverinfo', 'log');
     $resultDate = "近" . $_['days_number'] . "天";

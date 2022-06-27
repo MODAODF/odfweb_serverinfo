@@ -187,7 +187,7 @@
     }
 
     // X軸 標題名稱
-    function _getScaleLabel(labels) {
+    function _getScaleTitle(labels) {
         const labelYears = [], labelDays = [];
         labels.forEach(function(el) {
             const y = _formatDate(el, 'Y');
@@ -202,7 +202,7 @@
         else if (labelYears.length === 1) {
             str = `西元${labelYears[0]}年（${_formatDate(labelDays[0], 'M月D日')} 至 ${_formatDate(labelDays[labelDays.length-1], 'M月D日')}）`
         }
-        return {display:true,labelString:str};
+        return {display:true,text:str};
     }
 
     // X軸 標籤名稱們
@@ -276,48 +276,46 @@
                         display: true,
                         text: canvasTitle
                     },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                return _formatBytes(tooltipItem.yLabel);
-                            },
-                            title: function(tooltipItem, data) {
-                                return _getTooltipsTitle(tooltipItem[0].index);
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return _formatBytes(tooltipItem.raw);
+                                },
+                                title: function(tooltipItem) {
+                                    return _getTooltipsTitle(tooltipItem[0].dataIndex);
+                                }
                             }
-                        }
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
+                        },
                     },
                     elements: {
                         point: {
                             radius: 0
                         }
                     },
-					scales: {
-                        xAxes: [{
-                            scaleLabel: _getScaleLabel(logLabels),
+                    scales: {
+                        xAxes: {
+                            title: _getScaleTitle(logLabels),
                             ticks: {
                                 autoSkip: true,
-                                maxTicksLimit: 6,
+                                maxTicksLimit: 10,
                                 maxRotation: 0,
                             }
-                        }],
-						yAxes: [{
+                        },
+						yAxes: {
+                            min: 0,
+                            suggestedMax: Math.max.apply(null, logData['totalSpace']) + stepSize,
 							ticks: {
                                 autoSkip: true,
-                                minTicksLimit: 5,
-                                min: 0,
-                                suggestedMax: Math.max.apply(null, logData['totalSpace']) + stepSize,
+                                // minTicksLimit: 5,
                                 callback: function(value, index, values) {
                                     return _formatBytes(value);
                                 },
                             }
-                        }],
-					}
+                        },
+					},
 				},
 				data: {
                     labels: _formatLabels(logLabels),
@@ -348,11 +346,11 @@
             logDiskSpaceChart.config.data.datasets[0].data = logData['freeSpace'];
             logDiskSpaceChart.config.data.datasets[1].data = logData['totalSpace'];
             logDiskSpaceChart.config.data.labels = _formatLabels(logLabels);
-            logDiskSpaceChart.config.options.scales['xAxes'][0].scaleLabel = _getScaleLabel(logLabels);
-            logDiskSpaceChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+            logDiskSpaceChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+            logDiskSpaceChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
 
             stepSize = (logDiskSpaceChart.scales['y-axis-0']?.ticksAsNumbers[0] - logDiskSpaceChart?.scales['y-axis-0']?.ticksAsNumbers[1]) ?? stepSize;
-            logDiskSpaceChart.config.options.scales.yAxes[0].ticks.suggestedMax = Math.max.apply(null, logData['totalSpace']) + stepSize;
+            logDiskSpaceChart.config.options.scales.yAxes.suggestedMax = Math.max.apply(null, logData['totalSpace']) + stepSize;
         }
         logDiskSpaceChart.update();
     }
@@ -381,45 +379,47 @@
                         }
                     },
                     responsive: true,
-					legend: { display: false },
                     title: {
                         display: true,
                         text: canvasTitle,
                     },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            title: function(tooltipItem, data) {
-                                return _getTooltipsTitle(tooltipItem[0].index);
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(tooltipItem) {
+                                    return _getTooltipsTitle(tooltipItem[0].dataIndex);
+                                }
                             }
-                        }
+                        },
                     },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
-                    },
+                    // hover: {
+                    //     mode: 'nearest',
+                    //     intersect: true
+                    // },
                     elements: {
                         point: {
                             radius: 0
                         }
                     },
                     scales: {
-                        xAxes: [{
-                            scaleLabel: _getScaleLabel(logLabels),
+                        xAxes: {
+                            title: _getScaleTitle(logLabels),
                             ticks: {
                                 autoSkip: true,
-                                maxTicksLimit: 6,
+                                maxTicksLimit: 10,
                                 maxRotation: 0,
                             }
-                        }],
-                        yAxes: [{
+                        },
+                        yAxes: {
+                            min: 0,
                             ticks: {
                                 autoSkip: true,
                                 maxTicksLimit: 5,
-                                min: 0,
                             }
-                        }],
+                        },
                     }
                 },
                 data: {
@@ -439,8 +439,8 @@
 		} else {
             logCpuLoadChart.config.data.datasets[0].data = logData;
             logCpuLoadChart.config.data.labels = _formatLabels(logLabels);
-            logCpuLoadChart.config.options.scales['xAxes'][0].scaleLabel = _getScaleLabel(logLabels);
-            logCpuLoadChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+            logCpuLoadChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+            logCpuLoadChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
         }
 		logCpuLoadChart.update();
     }
@@ -469,23 +469,21 @@
                         }
                     },
                     responsive: true,
-					legend: { display: false },
                     title: {
                         display: true,
                         text: canvasTitle,
                     },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            title: function(tooltipItem, data) {
-                                return _getTooltipsTitle(tooltipItem[0].index);
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(tooltipItem) {
+                                    return _getTooltipsTitle(tooltipItem[0].dataIndex);
+                                }
                             }
-                        }
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
+                        },
                     },
                     elements: {
                         point: {
@@ -493,21 +491,21 @@
                         }
                     },
                     scales: {
-                        xAxes: [{
-                            scaleLabel: _getScaleLabel(logLabels),
+                        xAxes: {
+                            title: _getScaleTitle(logLabels),
                             ticks: {
                                 autoSkip: true,
-                                maxTicksLimit: 6,
+                                maxTicksLimit: 10,
                                 maxRotation: 0,
                             }
-                        }],
-                        yAxes: [{
+                        },
+                        yAxes: {
+                            suggestedMax: Math.max.apply(null, logData) + 1,
                             ticks: {
                                 autoSkip: true,
                                 maxTicksLimit: 5,
-                                suggestedMax: Math.max.apply(null, logData) + 1,
                             }
-                        }],
+                        },
                     }
                 },
                 data: {
@@ -528,8 +526,8 @@
 		} else {
             logFileChart.config.data.datasets[0].data = logData;
             logFileChart.config.data.labels = _formatLabels(logLabels);
-            logFileChart.config.options.scales['xAxes'][0].scaleLabel = _getScaleLabel(logLabels);
-            logFileChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+            logFileChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+            logFileChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
         }
 		logFileChart.update();
     }
@@ -568,18 +566,16 @@
                         display: true,
                         text: canvasTitle,
                     },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            title: function(tooltipItem, data) {
-                                return _getTooltipsTitle(tooltipItem[0].index);
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(tooltipItem) {
+                                    return _getTooltipsTitle(tooltipItem[0].dataIndex);
+                                }
                             }
-                        }
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
+                        },
                     },
                     elements: {
                         point: {
@@ -587,22 +583,22 @@
                         }
                     },
                     scales: {
-                        xAxes: [{
-                            scaleLabel: _getScaleLabel(logLabels),
+                        xAxes: {
+                            title: _getScaleTitle(logLabels),
                             ticks: {
                                 autoSkip: true,
-                                maxTicksLimit: 6,
+                                maxTicksLimit: 10,
                                 maxRotation: 0,
                             }
-                        }],
-                        yAxes: [{
+                        },
+                        yAxes: {
+                            suggestedMax: Math.max.apply(null, logData['totalUser']) + (stepSize === 1 ? 1:5),
                             ticks: {
                                 stepSize: stepSize,
                                 autoSkip: !(stepSize === 1),
                                 maxTicksLimit: 5,
-                                suggestedMax: Math.max.apply(null, logData['totalUser']) + (stepSize === 1 ? 1:5),
                             }
-                        }],
+                        },
                     }
                 },
                 data: {
@@ -634,8 +630,8 @@
             logUserChart.config.data.datasets[0].data = logData["hourActiveUser"];
             logUserChart.config.data.datasets[1].data = logData["totalUser"];
             logUserChart.config.data.labels = _formatLabels(logLabels);
-            logUserChart.config.options.scales['xAxes'][0].scaleLabel = _getScaleLabel(logLabels);
-            logUserChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+            logUserChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+            logUserChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
         }
 		logUserChart.update();
     }
@@ -691,23 +687,21 @@
                     }
                 },
                 responsive: true,
-                legend: { display: false },
                 title: {
                     display: true,
                     text: canvasTitle
                 },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        title: function(tooltipItem, data) {
-                            return _getTooltipsTitle(tooltipItem[0].index);
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            title: function(tooltipItem) {
+                                return _getTooltipsTitle(tooltipItem[0].dataIndex);
+                            }
                         }
-                    }
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
+                    },
                 },
                 elements: {
                     point: {
@@ -715,23 +709,23 @@
                     }
                 },
                 scales: {
-                    xAxes: [{
-                        scaleLabel: _getScaleLabel(logLabels),
+                    xAxes: {
+                        title: _getScaleTitle(logLabels),
                         ticks: {
                             autoSkip: true,
-                            maxTicksLimit: 6,
+                            maxTicksLimit: 10,
                             maxRotation: 0,
                         }
-                    }],
-                    yAxes: [{
+                    },
+                    yAxes: {
+                        min: 0,
+                        suggestedMax: Math.max.apply(null, logData) + (stepSize === 1 ? 1:5),
                         ticks: {
-                            min: 0,
                             stepSize: stepSize,
                             autoSkip: !(stepSize === 1),
                             maxTicksLimit: 5,
-                            suggestedMax: Math.max.apply(null, logData) + (stepSize === 1 ? 1:5),
                         }
-                    }],
+                    },
                 }
             },
             data: {
@@ -749,7 +743,6 @@
             },
         }
 
-        const newLabelTitle = _getScaleLabel(logLabels);
         const newLabelItem = _formatLabels(logLabels);
         if (type === 'user') {
             if (typeof logShareUserChart === 'undefined') {
@@ -758,8 +751,8 @@
             } else {
                 logShareUserChart.config.data.labels = newLabelItem;
                 logShareUserChart.config.data.datasets[0].data = logData;
-                logShareUserChart.config.options.scales['xAxes'][0].scaleLabel = newLabelTitle;
-                logShareUserChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+                logShareUserChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+                logShareUserChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
             }
             logShareUserChart.update();
         }
@@ -770,8 +763,8 @@
             } else {
                 logShareGroupChart.config.data.labels = newLabelItem;
                 logShareGroupChart.config.data.datasets[0].data = logData;
-                logShareGroupChart.config.options.scales['xAxes'][0].scaleLabel = newLabelTitle;
-                logShareGroupChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+                logShareGroupChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+                logShareGroupChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
             }
             logShareGroupChart.update();
         }
@@ -782,8 +775,8 @@
             } else {
                 logShareLinkChart.config.data.labels = newLabelItem;
                 logShareLinkChart.config.data.datasets[0].data = logData;
-                logShareLinkChart.config.options.scales['xAxes'][0].scaleLabel = newLabelTitle;
-                logShareLinkChart.config.options.tooltips.callbacks.title = (tooltipItem, data) => _getTooltipsTitle(tooltipItem[0].index);
+                logShareLinkChart.config.options.scales['xAxes'].title = _getScaleTitle(logLabels);
+                logShareLinkChart.config.options.plugins.tooltip.callbacks.title = (tooltipItem) => _getTooltipsTitle(tooltipItem[0].dataIndex);
             }
             logShareLinkChart.update();
         }
