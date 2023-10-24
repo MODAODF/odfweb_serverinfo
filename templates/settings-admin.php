@@ -51,7 +51,7 @@ $disks = $_['diskinfo'];
 		<div class="row">
 			<div class="col col-12">
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>" alt="<?php p($_['hostname']) ?>">
 					<?php p($_['hostname']); ?>
 				</h2>
 			</div>
@@ -76,7 +76,7 @@ $disks = $_['diskinfo'];
 		<div class="row">
 			<div class="col col-6 col-l-12">
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>" alt="<?php p($l->t('Load')) ?>">
 					<?php p($l->t('Load')); ?>
 				</h2>
 				<div id="cpuSection" class="infobox">
@@ -89,7 +89,7 @@ $disks = $_['diskinfo'];
 
 			<div class="col col-6 col-l-12">
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/quota.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/quota.svg')); ?>" alt="<?php p($l->t('Memory')) ?>">
 					<?php p($l->t('Memory')); ?>
 				</h2>
 				<div id="memorySection" class="infobox">
@@ -109,7 +109,7 @@ $disks = $_['diskinfo'];
 		<div class="row">
 			<div class="col col-12">
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/quota.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/quota.svg')); ?>" alt="<?php p($l->t('Disk')); ?>">
 					<?php p($l->t('Disk')); ?>
 				</h2>
 			</div>
@@ -154,7 +154,7 @@ $disks = $_['diskinfo'];
 		<div class="row">
 			<div class="col col-12">
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'categories/integration.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'categories/integration.svg')); ?>" alt="<?php p($l->t('Network')); ?>">
 					<?php p($l->t('Network')); ?>
 				</h2>
 			</div>
@@ -209,7 +209,7 @@ $disks = $_['diskinfo'];
 			<div class="col col-6 col-m-12">
 				<!-- ACTIVE USERS -->
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'categories/social.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'categories/social.svg')); ?>" alt="<?php p($l->t('Active users')); ?>">
 					<?php p($l->t('Active users')); ?>
 				</h2>
 				<div class="infobox">
@@ -234,7 +234,7 @@ $disks = $_['diskinfo'];
 			<div class="col col-6 col-m-12">
 				<!-- SHARES -->
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'places/files.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'places/files.svg')); ?>" alt="<?php p($l->t('Shares')); ?>">
 					<?php p($l->t('Shares')); ?>
 				</h2>
 				<div class="infobox">
@@ -260,7 +260,7 @@ $disks = $_['diskinfo'];
 			<div class="col col-6 col-m-12">
 				<!-- PHPINFO -->
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>" alt="<?php p($l->t('PHP')); ?>">
 					<?php p($l->t('PHP')); ?>
 				</h2>
 				<div class="infobox">
@@ -292,7 +292,7 @@ $disks = $_['diskinfo'];
 			<div class="col col-6 col-m-12">
 				<!-- DATABASE -->
 				<h2>
-					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>">
+					<img class="infoicon" src="<?php p(image_path('core', 'actions/screen.svg')); ?>" alt="<?php p($l->t('Database')); ?>">
 					<?php p($l->t('Database')); ?>
 				</h2>
 				<div class="infobox">
@@ -325,7 +325,7 @@ $disks = $_['diskinfo'];
 					<?php p($l->t('You can connect an external monitoring tool by using this end point').':'); ?>
 				</p>
 				<div class="monitoring-wrapper">
-					<input type="text" readonly="readonly" id="monitoring-endpoint-url" value="<?php echo p($_['ocs']); ?>"/>
+					<input type="text" title="URL" readonly="readonly" id="monitoring-endpoint-url" value="<?php echo p($_['ocs']); ?>"/>
 					<a class="clipboardButton icon icon-clippy" data-clipboard-target="#monitoring-endpoint-url"></a>
 				</div>
 				<p class="settings-hint">
